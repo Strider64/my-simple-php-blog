@@ -19,7 +19,7 @@ session_start();
 $user = (isset($_SESSION["user"])) ? $_SESSION["user"] : NULL;
 
 try {
-    $conn = new PDO("mysql:host=localhost:8889;dbname=mysimpleblog", 'root', 'sabr1964');
+    $conn = new PDO("mysql:host=localhost:8889;dbname=mysimpleblog", , );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $table1 = "CREATE TABLE IF NOT EXISTS mysimpleblog (
