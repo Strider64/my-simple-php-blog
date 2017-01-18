@@ -1,5 +1,8 @@
 <?php
-include "lib/includes/config.php";
+/*
+ * Create Database Tables (if needed) and a constant PDO connection:
+ */
+require_once "lib/includes/config.php";
 
 /*
  * Registration function of user:
