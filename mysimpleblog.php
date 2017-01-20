@@ -126,10 +126,6 @@ $result = $stmt->execute();
         <link rel="stylesheet" href="lib/css/mysimpleblog.css">
     </head>
     <body>
-
-        <!--            <button id="registerButton" class="addBlog" onclick="toggleClass('register', 'hideForm', 'registerButton', 'Register');">Show Register Button</button>
-                    <button id="loginButton" class="addBlog" onclick="toggleClass('login', 'hideForm', 'loginButton', 'Login');">Show Login Button</button>-->
-
         <?php if (!$user) { ?>
             <div class="container topBar">
                 <h5>Welcome to My Simple Blog!</h5>
