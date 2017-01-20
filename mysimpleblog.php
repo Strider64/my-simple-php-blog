@@ -126,57 +126,64 @@ $result = $stmt->execute();
         <link rel="stylesheet" href="lib/css/mysimpleblog.css">
     </head>
     <body>
+
+        <!--            <button id="registerButton" class="addBlog" onclick="toggleClass('register', 'hideForm', 'registerButton', 'Register');">Show Register Button</button>
+                    <button id="loginButton" class="addBlog" onclick="toggleClass('login', 'hideForm', 'loginButton', 'Login');">Show Login Button</button>-->
+
         <?php if (!$user) { ?>
-            <button id="registerButton" class="addBlog" onclick="toggleClass('register', 'hideForm', 'registerButton', 'Register');">Show Register Button</button>
-            <button id="loginButton" class="addBlog" onclick="toggleClass('login', 'hideForm', 'loginButton', 'Login');">Show Login Button</button>
-        <?php } ?>
-
-
-        <form id="register" name="mysimpleblog.php" method="post" autocomplete="off">
-            <fieldset>
-                <legend>Register</legend>
-                <label for="name">name</label>
-                <input id="name" type="text" name="name" value="" tabindex="1" autofocus>
-                <label for="email">email address</label>
-                <input id="email" type="email" name="email" value="" tabindex="2">
-                <label for="password">password</label>
-                <input id="password" type="password" name="password" tabindex="3">
-                <input type="submit" name="enter" value="register" tabindex="4">
-            </fieldset>
-        </form>
-
-        <form id="login" name="mysimpleblog.php" method="post" autocomplete="off">
-            <fieldset>
-                <legend>Login</legend>
-                <label for="loginEmail">email address</label>
-                <input id="loginEmail" type="text" name="email" value="" tabindex="1">
-                <label for="loginPassword">password</label>
-                <input id="loginPassword" type="password" name="password" tabindex="2">
-                <input type="submit" name="enter" value="login" tabindex="3">               
-            </fieldset>
-        </form>
-        <?php if ($user) { ?>
-            <button id="logoffButton" class="addBlog" onclick="toggleClass('logout', 'hideForm', 'logoffButton', 'Logout');">Show Logout Forum</button>
-            <form id="logout" action="mysimpleblog.php" method="post" autocomplete="off">
-                <fieldset>
-                    <legend>Logout</legend>
-                    <label for="loginEmail">email address</label>
-                    <input id="loginEmail" type="text" name="email" value="<?= $user->email; ?>" tabindex="1" readonly>
-                    <input type="submit" name="enter" value="logout" tabindex="2">
-                </fieldset>
-            </form>
-            <button id="blogButton" class="addBlog" onclick="toggleClass('mySimpleBlogForm', 'hideForm', 'blogButton');">Show Blog Form</button>
-            <form id="mySimpleBlogForm" action="mysimpleblog.php" method="post" autocomplete="off">
-                <fieldset>
-                    <legend>Enter Blog</legend>
-                    <label for="title">title</label>
-                    <input id="title" type="text" name="title" tabindex="2">
-                    <label id="labelTextarea"  for="message">Message</label>
-                    <textarea id="message" name="message" tabindex="3"></textarea>
-                    <input type="submit" name="submit" value="Submit" tabindex="4">
-                </fieldset>
-            </form>
-
+            <div class="container topBar">
+                <h5>Welcome to My Simple Blog!</h5>
+                <button id="box1" class="buttonStyle" onclick="toggleClass('maindiv1', 'hideBoxes', 'box1');">Open Login / Register</button>
+            </div>
+            <div id='maindiv1' class="container">
+                <form id="login" class="span6" name="mysimpleblog.php" method="post" autocomplete="off">
+                    <fieldset>
+                        <legend>Login</legend>
+                        <label for="loginEmail">email address</label>
+                        <input id="loginEmail" type="text" name="email" value="" tabindex="1" autofocus>
+                        <label for="loginPassword">password</label>
+                        <input id="loginPassword" type="password" name="password" tabindex="2">
+                        <input type="submit" name="enter" value="login" tabindex="3">               
+                    </fieldset>
+                </form>
+                <form id="register" class="span6" name="mysimpleblog.php" method="post" autocomplete="off">
+                    <fieldset>
+                        <legend>Register</legend>
+                        <label for="name">name</label>
+                        <input id="name" type="text" name="name" value="" tabindex="4">
+                        <label for="email">email address</label>
+                        <input id="email" type="email" name="email" value="" tabindex="5">
+                        <label for="password">password</label>
+                        <input id="password" type="password" name="password" tabindex="6">
+                        <input type="submit" name="enter" value="register" tabindex="7">
+                    </fieldset>
+                </form>
+            </div>
+        <?php } else { ?>
+            <div class="container topBar">
+                <h5>Welcome <?= $user->name ?>!</h5>
+                <button id="box2" class="buttonStyle" onclick="toggleClass('maindiv2', 'hideBoxes', 'box2', 'Open Enter Blog / Logout', 'Close Enter Blog / Logout');">Open Enter Blog / Logout</button>
+            </div>
+            <div id="maindiv2" class="container">
+                <form id="mySimpleBlogForm" class="span6" action="mysimpleblog.php" method="post" autocomplete="off">
+                    <fieldset>
+                        <legend>Enter Blog</legend>
+                        <label for="title">title</label>
+                        <input id="title" type="text" name="title" tabindex="1">
+                        <label id="labelTextarea"  for="message">Message</label>
+                        <textarea id="message" name="message" tabindex="2"></textarea>
+                        <input type="submit" name="submit" value="Submit" tabindex="3">
+                    </fieldset>
+                </form>
+                <form id="logout" class="span6" action="mysimpleblog.php" method="post" autocomplete="off">
+                    <fieldset>
+                        <legend>Logout</legend>
+                        <label for="viewEmail">email address</label>
+                        <input id="viewEmail" type="text" name="email" value="<?= $user->email; ?>" readonly>
+                        <input type="submit" name="enter" value="logout" tabindex="4">
+                    </fieldset>
+                </form>
+            </div>
         <?php } ?>
         <?php
         /*
