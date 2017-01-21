@@ -190,7 +190,7 @@ $result = $stmt->execute();
         while ($record = $stmt->fetch(PDO::FETCH_OBJ)) {
             echo "\t" . '<div class = "container mySimpleBlog span5">' . "\t\n";
             $myDate = new DateTime($record->dateCreated);
-            echo "\t\t<h2>" . $record->title . '<span>Created by ' . $record->name . ' on  ' . $myDate->format("F j, Y") . "</span></h2>\n";
+            echo "\t\t<h2>" . htmlspecialchars($record->title) . '<span>Created by ' . htmlspecialchars($record->name) . ' on  ' . $myDate->format("F j, Y") . "</span></h2>\n";
             echo "\t\t<p>" . nl2br(htmlentities($record->message)) . "</p>\n";
             echo "\t</div>\n";
         }
