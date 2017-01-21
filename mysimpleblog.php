@@ -4,6 +4,7 @@
  */
 require_once "lib/includes/config.php";
 
+$pdo = myDatabaseConnection();
 /*
  * Registration function of user:
  */
@@ -190,7 +191,7 @@ $result = $stmt->execute();
             echo "\t" . '<div class = "container mySimpleBlog span5">' . "\t\n";
             $myDate = new DateTime($record->dateCreated);
             echo "\t\t<h2>" . $record->title . '<span>Created by ' . $record->name . ' on  ' . $myDate->format("F j, Y") . "</span></h2>\n";
-            echo "\t\t<p>" . strip_tags(nl2br($record->message), '<br>') . "</p>\n";
+            echo "\t\t<p>" . nl2br(htmlentities($record->message)) . "</p>\n";
             echo "\t</div>\n";
         }
         ?>
