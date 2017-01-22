@@ -4,19 +4,28 @@
  */
 require_once "lib/includes/config.php";
 
-$pdo = myDatabaseConnection();
+use website_project\utilities\Validate;
+
+$data = [];
+$errMessage = FALSE;
+
+$closeBox = filter_input(INPUT_GET, 'close', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+if (isset($closeBox) && $closeBox === 'yes') {
+    unset($_SESSION['errorMessage']);
+    session_destroy();
+}
+
 /*
  * Registration function of user:
  */
 
-function registration($pdo = NULL) {
+function registration(array $data, $pdo = NULL) {
 
-    $name = filter_input(INPUT_POST, 'name');
-    $email = filter_input(INPUT_POST, 'email');
-    $password = password_hash(filter_input(INPUT_POST, 'password'), PASSWORD_DEFAULT);
+    $password = password_hash($data['password'], PASSWORD_DEFAULT);
     $query = 'INSERT INTO mysimpleregistration(name, email, password, dateCreated) VALUES ( :name, :email, :password, NOW())';
     $stmt = $pdo->prepare($query);
-    $result = $stmt->execute([':name' => $name, ':email' => $email, ':password' => $password]);
+    $result = $stmt->execute([':name' => $data['name'], ':email' => $data['email'], ':password' => $password]);
     if ($result) {
         header("Location: mysimpleblog.php");
         exit();
@@ -27,7 +36,17 @@ function registration($pdo = NULL) {
 
 $enter = filter_input(INPUT_POST, 'enter');
 if (isset($enter) && $enter === 'register') {
-    registration($pdo);
+    $data['name'] = filter_input(INPUT_POST, 'name');
+    $data['email'] = filter_input(INPUT_POST, 'email');
+    $data['password'] = filter_input(INPUT_POST, 'password');
+
+    $valid = new Validate($data);
+    $error = $valid->contentCheck();
+    if (!is_array($error)) { // If it is not an array then send verification and save user data to database table:
+        registration($data, $pdo); // Save to database table mysimpleregistration if there are no errors (not an array):
+    } else {
+        $errMessage = TRUE;
+    }
 }
 
 /*
@@ -127,6 +146,24 @@ $result = $stmt->execute();
         <link rel="stylesheet" href="lib/css/mysimpleblog.css">
     </head>
     <body>
+        <div   class="shadow <?php echo $errMessage ? 'shadowOn' : NULL; ?>">
+            <div class="errorBox">
+                <h4 class="errorHeading">The Registration Errors, Please Correct!</h4>
+                <ol>
+                    <li <?php echo!$error['empty'] ? 'class="red"' : NULL; ?>>All input fields are required!</li>
+                    <li <?php echo!$error['validEmail'] ? 'class="red"' : NULL; ?>>The email address must be valid one!</li>
+                    <li <?php echo!$error['duplicate'] ? 'class="red"' : NULL; ?>>Email address must be unique!</li>
+                    <li <?php echo!$error['validPassword'] ? 'class="red"' : NULL; ?>>Passwords
+                        <ol>
+                            <li <?php echo!$error['validPassword'] ? 'class="red"' : NULL; ?>>Must have one uppercase letter!</li>
+                            <li <?php echo!$error['validPassword'] ? 'class="red"' : NULL; ?>>Must have one lowercase letter!</li>
+                            <li <?php echo!$error['validPassword'] ? 'class="red"' : NULL; ?>>Must be 8 characters in length!</li>
+                        </ol>
+                    </li>
+                </ol>
+                <a href="mysimpleblog.php">Close</a>
+            </div>
+        </div>
         <?php if (!$user) { ?>
             <div class="container topBar">
                 <h5>Welcome to My Simple Blog!</h5>
@@ -149,7 +186,7 @@ $result = $stmt->execute();
                         <label for="name">name</label>
                         <input id="name" type="text" name="name" value="" tabindex="4">
                         <label for="email">email address</label>
-                        <input id="email" type="email" name="email" value="" tabindex="5">
+                        <input id="email" type="text" name="email" value="" tabindex="5">
                         <label for="password">password</label>
                         <input id="password" type="password" name="password" tabindex="6">
                         <input type="submit" name="enter" value="register" tabindex="7">
