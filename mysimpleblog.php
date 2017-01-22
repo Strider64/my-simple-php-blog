@@ -148,7 +148,7 @@ $result = $stmt->execute();
     <body>
         <div   class="shadow <?php echo $errMessage ? 'shadowOn' : NULL; ?>">
             <div class="errorBox">
-                <h4 class="errorHeading">The Registration Errors, Please Correct!</h4>
+                <h4 class="errorHeading">Registration Errors, Please Correct!</h4>
                 <ol>
                     <li <?php echo!$error['empty'] ? 'class="red"' : NULL; ?>>All input fields are required!</li>
                     <li <?php echo!$error['validEmail'] ? 'class="red"' : NULL; ?>>The email address must be valid one!</li>
