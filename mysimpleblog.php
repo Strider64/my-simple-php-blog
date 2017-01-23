@@ -16,81 +16,31 @@ if (isset($closeBox) && $closeBox === 'yes') {
     session_destroy();
 }
 
-/*
- * Registration function of user:
- */
-
-function registration(array $data, $pdo = NULL) {
-
-    $password = password_hash($data['password'], PASSWORD_DEFAULT);
-    $query = 'INSERT INTO mysimpleregistration(name, email, password, dateCreated) VALUES ( :name, :email, :password, NOW())';
-    $stmt = $pdo->prepare($query);
-    $result = $stmt->execute([':name' => $data['name'], ':email' => $data['email'], ':password' => $password]);
-    if ($result) {
-        header("Location: mysimpleblog.php");
-        exit();
-    } else {
-        echo 'Error, Something went wrong!';
-    }
-}
-
 $enter = filter_input(INPUT_POST, 'enter');
 if (isset($enter) && $enter === 'register') {
     $data['name'] = filter_input(INPUT_POST, 'name');
     $data['email'] = filter_input(INPUT_POST, 'email');
     $data['password'] = filter_input(INPUT_POST, 'password');
+    
 
+    $data['confirmation']= generateRandom();
+    
     $valid = new Validate($data);
     $error = $valid->contentCheck();
     if (!is_array($error)) { // If it is not an array then send verification and save user data to database table:
-        registration($data, $pdo); // Save to database table mysimpleregistration if there are no errors (not an array):
+        registration($data, $pdo); // Save to db table mysimpleregistration calling registration function:
     } else {
         $errMessage = TRUE;
     }
 }
 
-/*
- * Login function of user:
- */
-
-function login($pdo = NULL) {
-
-    $email = filter_input(INPUT_POST, 'email');
-    $password = filter_input(INPUT_POST, 'password');
-
-    $query = 'SELECT * FROM mysimpleregistration WHERE email=:email';
-
-    $stmt = $pdo->prepare($query); // Prepare the query:
-    $stmt->execute([':email' => $email]); // Execute the query with the supplied user's parameter(s):
-
-    $stmt->setFetchMode(PDO::FETCH_OBJ);
-    $user = $stmt->fetch();
-
-    /*
-     * If password matches database table match send back true otherwise send back false.
-     */
-    if (password_verify($password, $user->password)) {
-
-        $userArray['id'] = $user->id;
-        $userArray['name'] = $user->name;
-        $userArray['email'] = $user->email;
-        //$userArray['csrf_token'] = $_SESSION['csrf_token'];
-
-        $_SESSION['user'] = (object) $userArray;
-        header("Location: mysimpleblog.php");
-        exit();
-    } else {
-        echo "Login Failed!";
-    }
+if (isset($enter) && $enter === 'login') {
+    login($pdo); // Login function:
 }
 
 /*
  * Logout user:
  */
-if (isset($enter) && $enter === 'login') {
-    login($pdo);
-}
-
 
 if (isset($enter) && $enter === 'logout') {
     unset($_SESSION['user']);
@@ -124,7 +74,7 @@ if (isset($submit) && $submit === "Submit") {
 
 
 /*
- * Display Blog PDO and Setup the query 
+ * Display blog setup using PDO.
  */
 $query = 'SELECT id, userid, name, title, message, dateCreated FROM mysimpleblog ORDER BY id DESC';
 /*
@@ -135,6 +85,8 @@ $stmt = $pdo->prepare($query);
  * Execute the query 
  */
 $result = $stmt->execute();
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -221,7 +173,7 @@ $result = $stmt->execute();
         <?php } ?>
         <?php
         /*
-         * Display the output
+         * Display the output of the blog.
          */
         echo "\n";
         while ($record = $stmt->fetch(PDO::FETCH_OBJ)) {
