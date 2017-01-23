@@ -64,7 +64,7 @@ p {
     margin-left: -250px;
 }
 
-.errorBox h4 {
+.errorBox h4.errorHeading {
     font-family:  'PT Serif Caption', serif;
     font-size: 1.4rem;
     color: red;
@@ -201,6 +201,9 @@ form label {
 }
 
 form input {
+    -moz-box-shadow:    inset 0 0 10px #000000;
+    -webkit-box-shadow: inset 0 0 10px #000000;
+    box-shadow:         inset 0 0 10px #000000;
     clear: right;
     display: block;
     width: 100%;
@@ -239,8 +242,15 @@ form textarea {
 }
 
 form input[type=submit] {
+    -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);    
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
     outline: none;
     border: none;
+    float: right;
     width: 100%;
     max-width: 120px;
     height: 40px;
@@ -250,6 +260,10 @@ form input[type=submit] {
     font-size: 1.2rem;
     color: #fff;
     text-transform: capitalize;
+}
+
+form input[type=submit]:hover {
+    background-color: green;
 }
 
 .mySimpleBlog {
@@ -282,7 +296,7 @@ form input[type=submit] {
 }
 
 .mySimpleBlog p {
-    font-size: 1.4rem;
+    font-size: 1.0rem;
     line-height: 1.5;
     margin-top: 15px;
     margin-bottom: 10px;
